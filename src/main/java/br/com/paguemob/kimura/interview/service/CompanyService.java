@@ -11,4 +11,6 @@ public interface CompanyService {
 
 	public Company createCompany(Company company);
 
+	public Company getCompany(String id);
+
 }

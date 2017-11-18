@@ -117,7 +117,7 @@ public class CompanyIntegrationTest {
 		assertThat(company.getIndustry()).isEqualTo("Software");
 	}
 
-	@Test @Ignore
+	@Test
 	public void shouldBeAbleToReturnACompanyById() {
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target("http://localhost:" + this.port);

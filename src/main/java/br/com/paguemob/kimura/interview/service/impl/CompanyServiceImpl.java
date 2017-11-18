@@ -26,4 +26,9 @@ public class CompanyServiceImpl implements CompanyService {
 		return companyRepository.save(company);
 	}
 
+	@Override
+	public Company getCompany(String id) {
+		return companyRepository.findOne(Long.valueOf(id));
+	}
+
 }
