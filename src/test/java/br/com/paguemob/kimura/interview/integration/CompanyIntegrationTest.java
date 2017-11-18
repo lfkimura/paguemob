@@ -11,9 +11,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.MessageBodyReader;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,12 +50,13 @@ public class CompanyIntegrationTest {
 		WebTarget target = client.target("http://localhost:" + this.port);
 
 		Response response = target.path("/rest/company/").request().get();
-		@SuppressWarnings("unchecked")
-		List<Company> companies =  response.readEntity(List.class);
+		List<Company> companies = response.readEntity(new GenericType<List<Company>>() {
+		});
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 		assertThat(response.getHeaders().get("Content-Type").get(0)).isEqualTo(MediaType.APPLICATION_JSON);
 		assertThat(companies.size()).isEqualTo(3);
 	}
+
 	@Test
 	public void shouldBeAbleToRegisterACompany() {
 		Client client = ClientBuilder.newClient();
@@ -77,16 +76,14 @@ public class CompanyIntegrationTest {
 
 	}
 
-
-	@Test 
+	@Test
 	public void shouldBeAbleToSearchCompaniesWithNameLike() {
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target("http://localhost:" + this.port);
 
 		Response response = target.path("/rest/company/").queryParam("name", "Kimura").request().get();
-		@SuppressWarnings("unchecked")
 		List<Company> companies = response.readEntity(new GenericType<List<Company>>() {
-        });
+		});
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 		assertThat(response.getHeaders().get("Content-Type").get(0)).isEqualTo(MediaType.APPLICATION_JSON);
 		assertThat(companies.size()).isEqualTo(1);
@@ -97,7 +94,7 @@ public class CompanyIntegrationTest {
 		assertThat(company.getWebsite()).isEqualTo("www.kimurasistemas.com");
 		assertThat(company.getIndustry()).isEqualTo("IT");
 	}
- 
+
 	@Test
 	public void shouldBeAbleToSearchCompaniesOfAnIndustry() {
 		Client client = ClientBuilder.newClient();
@@ -105,9 +102,10 @@ public class CompanyIntegrationTest {
 
 		Response response = target.path("/rest/company/").queryParam("industry", "Software").request().get();
 		List<Company> companies = (List<Company>) response.readEntity(new GenericType<List<Company>>() {
-                });;
-		Company company =  companies.get(0);
-		
+		});
+		;
+		Company company = companies.get(0);
+
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 		assertThat(response.getHeaders().get("Content-Type").get(0)).isEqualTo(MediaType.APPLICATION_JSON);
 		assertThat(companies.size()).isEqualTo(1);
@@ -123,7 +121,6 @@ public class CompanyIntegrationTest {
 		WebTarget target = client.target("http://localhost:" + this.port);
 
 		Response response = target.path("/rest/company/1").request().get();
-		@SuppressWarnings("unchecked")
 		Company company = response.readEntity(Company.class);
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 		assertThat(response.getHeaders().get("Content-Type").get(0)).isEqualTo(MediaType.APPLICATION_JSON);

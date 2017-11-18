@@ -5,16 +5,23 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
 public class Employee {
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
 	@Column
-	private String name;
+	private String nameTitle;
+
+	@Column
+	private String firstName;
+
+	@Column
+	private String lastName;
 
 	@Column
 	private String gender;
@@ -24,8 +31,9 @@ public class Employee {
 
 	@Column
 	private String cpf;
-	
+
 	@ManyToOne
+	@JoinColumn(name="employer")
 	private Company employer;
 
 	@Column
@@ -33,13 +41,16 @@ public class Employee {
 
 	@Column
 	private String seed;
-	
-	public Employee(){}
 
-	public Employee(String name, String gender, String email, String cpf, Company employer, String jobTitle,
-			String seed) {
+	public Employee() {
+	}
+
+	public Employee(String title, String first, String last, String gender, String email, String cpf, Company employer,
+			String jobTitle, String seed) {
 		super();
-		this.name = name;
+		this.nameTitle = title;
+		this.firstName = first;
+		this.lastName = last;
 		this.gender = gender;
 		this.email = email;
 		this.cpf = cpf;
@@ -48,12 +59,36 @@ public class Employee {
 		this.seed = seed;
 	}
 
-	public String getName() {
-		return name;
+	public Long getId() {
+		return id;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNameTitle() {
+		return nameTitle;
+	}
+
+	public void setNameTitle(String nameTitle) {
+		this.nameTitle = nameTitle;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getGender() {
