@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import br.com.paguemob.kimura.interview.vo.EmployeeVO;
+
 @Entity
 public class Employee {
 	@Id
@@ -33,7 +35,7 @@ public class Employee {
 	private String cpf;
 
 	@ManyToOne
-	@JoinColumn(name="employer")
+	@JoinColumn(name = "employer")
 	private Company employer;
 
 	@Column
@@ -42,21 +44,17 @@ public class Employee {
 	@Column
 	private String seed;
 
-	public Employee() {
-	}
-
-	public Employee(String title, String first, String last, String gender, String email, String cpf, Company employer,
-			String jobTitle, String seed) {
+	public Employee(EmployeeVO employeeVO, Company company) {
 		super();
-		this.nameTitle = title;
-		this.firstName = first;
-		this.lastName = last;
-		this.gender = gender;
-		this.email = email;
-		this.cpf = cpf;
-		this.employer = employer;
-		this.jobTitle = jobTitle;
-		this.seed = seed;
+		this.nameTitle = employeeVO.getName().getTitle();
+		this.firstName = employeeVO.getName().getFirst();
+		this.lastName = employeeVO.getName().getLast();
+		this.gender = employeeVO.getGender();
+		this.email = employeeVO.getEmail();
+		this.cpf = employeeVO.getCpf();
+		this.employer = company;
+		this.jobTitle = employeeVO.getJobTitle();
+		this.seed = employeeVO.getSeed();
 	}
 
 	public Long getId() {

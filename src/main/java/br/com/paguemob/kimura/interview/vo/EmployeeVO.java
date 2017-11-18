@@ -2,6 +2,8 @@ package br.com.paguemob.kimura.interview.vo;
 
 import java.io.Serializable;
 
+import br.com.paguemob.kimura.interview.model.Employee;
+
 public class EmployeeVO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -21,7 +23,6 @@ public class EmployeeVO implements Serializable {
 
 	private String seed;
 
-	
 	public EmployeeVO(NameVO name, String gender, String email, String cpf, Long employer, String jobTitle,
 			String seed) {
 		super();
@@ -35,6 +36,17 @@ public class EmployeeVO implements Serializable {
 	}
 
 	public EmployeeVO() {
+	}
+
+	public EmployeeVO(Employee employee) {
+		super();
+		this.name = new NameVO(employee.getNameTitle(), employee.getFirstName(), employee.getLastName());
+		this.gender = employee.getGender();
+		this.email = employee.getEmail();
+		this.cpf = employee.getCpf();
+		this.employer = employee.getEmployer().getId();
+		this.jobTitle = employee.getJobTitle();
+		this.seed = employee.getSeed();
 	}
 
 	public Long getId() {
@@ -100,6 +112,5 @@ public class EmployeeVO implements Serializable {
 	public void setSeed(String seed) {
 		this.seed = seed;
 	}
-
 
 }
