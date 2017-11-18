@@ -28,7 +28,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			return ((List<Employee>) employeeRepository.findAll()).stream().map(employee -> new EmployeeVO(employee))
 					.collect(Collectors.toList());
 		} else
-			return employeeRepository.findJobTitleLike(jobTitle).stream().map(employee -> new EmployeeVO(employee))
+			return employeeRepository.findByJobTitleLike(jobTitle).stream().map(employee -> new EmployeeVO(employee))
 					.collect(Collectors.toList());
 	}
 

@@ -10,6 +10,6 @@ import br.com.paguemob.kimura.interview.model.Employee;
 @Repository
 public interface EmployeeRepository extends CrudRepository<Employee, Long> {
 
-	public List<Employee> findJobTitleLike(String jobTitle);
+	public List<Employee> findByJobTitleLike(String jobTitle);
 
 }
