@@ -12,9 +12,6 @@ public class Filter<T> {
 	public Filter(String name, FilterOperatorType operator, T value) {
 		this.name = name;
 		this.operator = operator;
-		if(operator== FilterOperatorType.LIKE){
-			this.value = (T) ("%"+value+"%");
-		}
 		this.value = value;
 	}
 

@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import br.com.paguemob.kimura.interview.filters.Filter;
+import br.com.paguemob.kimura.interview.filters.FilterOperatorType;
 import br.com.paguemob.kimura.interview.model.Company;
 import br.com.paguemob.kimura.interview.repository.CompanyRepositoryCustom;
 
@@ -31,7 +32,11 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
 
 		TypedQuery<Company> query = entityManager.createQuery(builder.toString(), Company.class);
 		for (Filter<String> filter : filters) {
-			query.setParameter(filter.getName(), filter.getValue());
+
+			if (filter.getOperator() == FilterOperatorType.LIKE) {
+				query.setParameter(filter.getName(), "%" + filter.getValue() + "%");
+			} else
+				query.setParameter(filter.getName(), filter.getValue());
 		}
 
 		return query.getResultList();
