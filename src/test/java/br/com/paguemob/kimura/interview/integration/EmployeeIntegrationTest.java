@@ -80,7 +80,7 @@ public class EmployeeIntegrationTest {
 		});
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 		assertThat(response.getHeaders().get("Content-Type").get(0)).isEqualTo(MediaType.APPLICATION_JSON);
-		assertThat(employees.size()).isEqualTo(3);
+		assertThat(employees.size()).isEqualTo(5);
 	}
 
 	@Test
@@ -115,6 +115,20 @@ public class EmployeeIntegrationTest {
 		assertThat(employee.getGender()).isEqualTo("male");
 		assertThat(employee.getEmployer()).isEqualTo(1l);
 		assertThat(employee.getJobTitle()).isEqualTo("Fuckin Developer");
+	}
+	
+
+	@Test
+	public void shouldPaginateListAllEmployees() {
+		Client client = ClientBuilder.newClient();
+		WebTarget target = client.target("http://localhost:" + this.port);
+
+		Response response = target.path(REST_EMPLOYEE).queryParam("page", 3).queryParam("maxResults", 2).request().get();
+		List<EmployeeVO> employees = response.readEntity(new GenericType<List<EmployeeVO>>() {
+		});
+		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+		assertThat(response.getHeaders().get("Content-Type").get(0)).isEqualTo(MediaType.APPLICATION_JSON);
+		assertThat(employees.size()).isEqualTo(1);
 	}
 
 }

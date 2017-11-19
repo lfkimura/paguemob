@@ -41,6 +41,7 @@ public class IndustryIntegrationTest {
 		WebTarget target = client.target("http://localhost:" + this.port);
 
 		Response response = target.path("/rest/industry/").request().get();
+		@SuppressWarnings("unchecked")
 		List<IndustryType> industries = response.readEntity(List.class);
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 		assertThat(response.getHeaders().get("Content-Type").get(0)).isEqualTo(MediaType.APPLICATION_JSON);

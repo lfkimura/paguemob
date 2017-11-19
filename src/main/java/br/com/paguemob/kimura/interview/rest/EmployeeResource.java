@@ -1,5 +1,7 @@
 package br.com.paguemob.kimura.interview.rest;
 
+import java.util.List;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -13,6 +15,7 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 
 import br.com.paguemob.kimura.interview.service.EmployeeService;
 import br.com.paguemob.kimura.interview.vo.EmployeeVO;
@@ -25,8 +28,20 @@ public class EmployeeResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getEmployees(@QueryParam("jobTitle") String jobTitle) {
-		return Response.ok(service.getEmployees(jobTitle)).build();
+	public Response getEmployees(@QueryParam("jobTitle") String jobTitle, @QueryParam("page") Integer page,
+			@QueryParam("maxResults") Integer maxResults) {
+		List<EmployeeVO> employees;
+		if (shouldBePaginated(page, maxResults)) {
+			employees = service.getEmployees(jobTitle, new PageRequest(page-1, maxResults));
+		} else
+			employees = service.getEmployees(jobTitle);
+
+		return Response.ok(employees).build();
+
+	}
+
+	private boolean shouldBePaginated(Integer page, Integer maxResults) {
+		return page != null && maxResults != null && page > 0;
 	}
 
 	@POST

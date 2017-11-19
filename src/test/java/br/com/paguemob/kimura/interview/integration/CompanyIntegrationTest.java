@@ -55,9 +55,9 @@ public class CompanyIntegrationTest {
 		});
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 		assertThat(response.getHeaders().get("Content-Type").get(0)).isEqualTo(MediaType.APPLICATION_JSON);
-		assertThat(companies.size()).isEqualTo(3);
+		assertThat(companies.size()).isEqualTo(5);
 	}
-
+	
 	@Test
 	public void shouldBeAbleToRegisterACompany() {
 		Client client = ClientBuilder.newClient();
@@ -132,4 +132,17 @@ public class CompanyIntegrationTest {
 
 	}
 
+
+	@Test
+	public void shouldBeAblePaginateSearchCompaniesWithNameLike() {
+		Client client = ClientBuilder.newClient();
+		WebTarget target = client.target("http://localhost:" + this.port);
+
+		Response response = target.path("/rest/company/").queryParam("name", "Kimura").queryParam("page", 1).queryParam("maxResults", 2).request().get();
+		List<CompanyVO> companies = response.readEntity(new GenericType<List<CompanyVO>>() {
+		});
+		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+		assertThat(response.getHeaders().get("Content-Type").get(0)).isEqualTo(MediaType.APPLICATION_JSON);
+		assertThat(companies.size()).isEqualTo(1);
+	}
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.paguemob.kimura.interview.enums.IndustryType;
@@ -46,5 +47,12 @@ public class CompanyServiceImpl implements CompanyService {
 
 		return new ArrayList<IndustryType>(Arrays.asList(IndustryType.values()));
 	}
+
+	@Override
+	public List<CompanyVO> getCompanies(List<Filter<String>> filters, Pageable pageRequest) {
+		return ((List<Company>) companyRepository.findCompaniesWithFilters(filters,  pageRequest).getContent()).stream()
+				.map(company -> new CompanyVO(company)).collect(Collectors.toList());
+	}
+
 
 }

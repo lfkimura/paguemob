@@ -16,6 +16,7 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 
 import br.com.paguemob.kimura.interview.enums.IndustryType;
 import br.com.paguemob.kimura.interview.filters.Filter;
@@ -31,9 +32,19 @@ public class CompanyResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCompanies(@QueryParam("name") String name, @QueryParam("industry") String industry) {
+	public Response getCompanies(@QueryParam("name") String name, @QueryParam("industry") String industry, @QueryParam("page") Integer page, @QueryParam("maxResults") Integer maxResults) {
 		List<Filter<String>> filters = addFilters(name, industry);
-		return Response.ok(service.getCompanies(filters)).build();
+		List<CompanyVO> companies;
+		if(shouldBePaginated(page, maxResults)){
+			companies = service.getCompanies(filters,new PageRequest(page-1, maxResults) );
+		}
+		else companies = service.getCompanies(filters);
+		
+		return Response.ok(companies).build();
+	}
+
+	private boolean shouldBePaginated(Integer page, Integer maxResults) {
+		return page!= null && maxResults!= null && page>0;
 	}
 
 	@POST
@@ -45,6 +56,7 @@ public class CompanyResource {
 		return Response.created(location.build()).build();
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private List<Filter<String>> addFilters(String name, String industry) {
 		List<Filter<String>> filters = new ArrayList<Filter<String>>();
 		if (name != null)

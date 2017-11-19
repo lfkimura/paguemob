@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.paguemob.kimura.interview.model.Company;
@@ -44,6 +45,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 		EmployeeVO employeeVO = (employee = employeeRepository.findOne(Long.valueOf(id))) != null
 				? new EmployeeVO(employee) : null;
 		return employeeVO;
+	}
+
+	@Override
+	public List<EmployeeVO> getEmployees(String jobTitle, Pageable page) {
+		if (jobTitle == null) {
+			return ((List<Employee>) employeeRepository.findAll(page).getContent()).stream()
+					.map(employee -> new EmployeeVO(employee)).collect(Collectors.toList());
+		} else
+			return ((List<Employee>) employeeRepository.findByJobTitleLike(jobTitle, page).getContent()).stream()
+					.map(employee -> new EmployeeVO(employee)).collect(Collectors.toList());
 	}
 
 }
