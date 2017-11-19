@@ -25,6 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import br.com.paguemob.kimura.interview.InterviewApplication;
 import br.com.paguemob.kimura.interview.model.Company;
 import br.com.paguemob.kimura.interview.repository.CompanyRepository;
+import br.com.paguemob.kimura.interview.vo.CompanyVO;
 
 /*This API
    Should be able to register a Company
@@ -50,7 +51,7 @@ public class CompanyIntegrationTest {
 		WebTarget target = client.target("http://localhost:" + this.port);
 
 		Response response = target.path("/rest/company/").request().get();
-		List<Company> companies = response.readEntity(new GenericType<List<Company>>() {
+		List<CompanyVO> companies = response.readEntity(new GenericType<List<CompanyVO>>() {
 		});
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 		assertThat(response.getHeaders().get("Content-Type").get(0)).isEqualTo(MediaType.APPLICATION_JSON);
@@ -62,8 +63,8 @@ public class CompanyIntegrationTest {
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target("http://localhost:" + this.port);
 
-		Entity<Company> company = Entity.entity(new Company("Kimura Systems", "44.788.839/0001-01", "11996611884",
-				"www.kimurasystems.com", "payment industry"), MediaType.APPLICATION_JSON);
+		Entity<CompanyVO> company = Entity.entity(new CompanyVO("Kimura Systems", "44.788.839/0001-01", "11996611884",
+				"www.kimurasystems.com", "Software"), MediaType.APPLICATION_JSON);
 
 		Response response = target.path("/rest/company/").request().accept(MediaType.APPLICATION_JSON).post(company);
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED.value());
@@ -82,17 +83,17 @@ public class CompanyIntegrationTest {
 		WebTarget target = client.target("http://localhost:" + this.port);
 
 		Response response = target.path("/rest/company/").queryParam("name", "Kimura").request().get();
-		List<Company> companies = response.readEntity(new GenericType<List<Company>>() {
+		List<CompanyVO> companies = response.readEntity(new GenericType<List<CompanyVO>>() {
 		});
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 		assertThat(response.getHeaders().get("Content-Type").get(0)).isEqualTo(MediaType.APPLICATION_JSON);
 		assertThat(companies.size()).isEqualTo(1);
-		Company company = (Company) companies.get(0);
+		CompanyVO company = (CompanyVO) companies.get(0);
 
 		assertThat(company.getName()).isEqualTo("Kimura Sistemas");
 		assertThat(company.getCnpj()).isEqualTo("51.855.786/0001-60");
 		assertThat(company.getWebsite()).isEqualTo("www.kimurasistemas.com");
-		assertThat(company.getIndustry()).isEqualTo("IT");
+		assertThat(company.getIndustry()).isEqualTo("Bussiness Services");
 	}
 
 	@Test
@@ -101,10 +102,10 @@ public class CompanyIntegrationTest {
 		WebTarget target = client.target("http://localhost:" + this.port);
 
 		Response response = target.path("/rest/company/").queryParam("industry", "Software").request().get();
-		List<Company> companies = (List<Company>) response.readEntity(new GenericType<List<Company>>() {
+		List<CompanyVO> companies = (List<CompanyVO>) response.readEntity(new GenericType<List<CompanyVO>>() {
 		});
 		;
-		Company company = companies.get(0);
+		CompanyVO company = companies.get(0);
 
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 		assertThat(response.getHeaders().get("Content-Type").get(0)).isEqualTo(MediaType.APPLICATION_JSON);
@@ -121,13 +122,13 @@ public class CompanyIntegrationTest {
 		WebTarget target = client.target("http://localhost:" + this.port);
 
 		Response response = target.path("/rest/company/1").request().get();
-		Company company = response.readEntity(Company.class);
+		CompanyVO company = response.readEntity(CompanyVO.class);
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 		assertThat(response.getHeaders().get("Content-Type").get(0)).isEqualTo(MediaType.APPLICATION_JSON);
 		assertThat(company.getName()).isEqualTo("Kimura Sistemas");
 		assertThat(company.getCnpj()).isEqualTo("51.855.786/0001-60");
 		assertThat(company.getWebsite()).isEqualTo("www.kimurasistemas.com");
-		assertThat(company.getIndustry()).isEqualTo("IT");
+		assertThat(company.getIndustry()).isEqualTo("Bussiness Services");
 
 	}
 

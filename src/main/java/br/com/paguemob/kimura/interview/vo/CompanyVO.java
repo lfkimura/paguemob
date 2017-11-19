@@ -1,43 +1,24 @@
-package br.com.paguemob.kimura.interview.model;
+package br.com.paguemob.kimura.interview.vo;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import br.com.paguemob.kimura.interview.model.Company;
 
-import br.com.paguemob.kimura.interview.converter.IndustryConverter;
-import br.com.paguemob.kimura.interview.enums.IndustryType;
-import br.com.paguemob.kimura.interview.vo.CompanyVO;
+public class CompanyVO {
+	@SuppressWarnings("unused")
+	private static final long serialVersionUID = 1L;
 
-@Entity
-public class Company {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column
 	private String name;
 
-	@Column
 	private String cnpj;
 
-	@Column
 	private String telephone;
 
-	@Column
 	private String website;
 
-	@Column
-	@Convert(converter = IndustryConverter.class)
-	private IndustryType industry;
+	private String industry;
 
-	public Company() {
-	}
-
-	public Company(String name, String cnpj, String telephone, String website, IndustryType industry) {
+	public CompanyVO(String name, String cnpj, String telephone, String website, String industry) {
 		super();
 		this.name = name;
 		this.cnpj = cnpj;
@@ -46,17 +27,25 @@ public class Company {
 		this.industry = industry;
 	}
 
-	public Company(CompanyVO company) {
+	public CompanyVO() {
+	}
 
+	public CompanyVO(Company company) {
+		super();
+		this.id = company.getId();
 		this.name = company.getName();
 		this.cnpj = company.getCnpj();
 		this.telephone = company.getTelephone();
 		this.website = company.getWebsite();
-		this.industry = IndustryType.findByName(company.getIndustry());
+		this.industry = company.getIndustry().getName();
 	}
 
 	public Long getId() {
-		return this.id;
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -91,11 +80,11 @@ public class Company {
 		this.website = website;
 	}
 
-	public IndustryType getIndustry() {
+	public String getIndustry() {
 		return industry;
 	}
 
-	public void setIndustry(IndustryType industry) {
+	public void setIndustry(String industry) {
 		this.industry = industry;
 	}
 

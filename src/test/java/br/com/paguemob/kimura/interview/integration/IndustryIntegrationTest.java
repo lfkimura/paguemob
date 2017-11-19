@@ -7,11 +7,9 @@ import java.util.List;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +20,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import br.com.paguemob.kimura.interview.InterviewApplication;
+import br.com.paguemob.kimura.interview.enums.IndustryType;
 
 /*
  * 	Should be able to return a list with all supported Industries (List can have any entries, but at least 10 pre-definied items)
@@ -42,8 +41,7 @@ public class IndustryIntegrationTest {
 		WebTarget target = client.target("http://localhost:" + this.port);
 
 		Response response = target.path("/rest/industry/").request().get();
-		List<JSONObject> industries = response.readEntity(new GenericType<List<JSONObject>>() {
-		});
+		List<IndustryType> industries = response.readEntity(List.class);
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 		assertThat(response.getHeaders().get("Content-Type").get(0)).isEqualTo(MediaType.APPLICATION_JSON);
 		assertThat(industries.size()).isEqualTo(10);

@@ -17,10 +17,11 @@ import javax.ws.rs.core.UriInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import br.com.paguemob.kimura.interview.enums.IndustryType;
 import br.com.paguemob.kimura.interview.filters.Filter;
 import br.com.paguemob.kimura.interview.filters.FilterOperatorType;
-import br.com.paguemob.kimura.interview.model.Company;
 import br.com.paguemob.kimura.interview.service.CompanyService;
+import br.com.paguemob.kimura.interview.vo.CompanyVO;
 
 @Path("/company")
 public class CompanyResource {
@@ -37,7 +38,7 @@ public class CompanyResource {
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response newCompanny(@Context UriInfo uriInfo, Company company) {
+	public Response newCompanny(@Context UriInfo uriInfo, CompanyVO company) {
 		Long companyId = service.createCompany(company).getId();
 		UriBuilder location = uriInfo.getAbsolutePathBuilder();
 		location.path(Long.toString(companyId));
@@ -49,7 +50,7 @@ public class CompanyResource {
 		if (name != null)
 			filters.add(new Filter("name", FilterOperatorType.LIKE, name));
 		if (industry != null)
-			filters.add(new Filter("industry", FilterOperatorType.EQUAL, industry));
+			filters.add(new Filter("industry", FilterOperatorType.EQUAL, IndustryType.findByName(industry)));
 		return filters;
 	}
 	@GET
