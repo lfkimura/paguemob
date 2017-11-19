@@ -56,10 +56,10 @@ public class EmployeeIntegrationTest {
 
 		NameVO name = new NameVO("", "Gabriela", "Kimura");
 
-		Entity<EmployeeVO> company = Entity.entity(new EmployeeVO(name, "female", "Gabriela@zipmail.com",
+		Entity<EmployeeVO> employee = Entity.entity(new EmployeeVO(name, "female", "Gabriela@zipmail.com",
 				"302.166.654-55", (long) 2, "Finance Executive ", ""), MediaType.APPLICATION_JSON);
 
-		Response response = target.path(REST_EMPLOYEE).request().accept(MediaType.APPLICATION_JSON).post(company);
+		Response response = target.path(REST_EMPLOYEE).request().accept(MediaType.APPLICATION_JSON).post(employee);
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED.value());
 		String location = response.getHeaders().get("location").get(0).toString();
 		assertThat(location.contains(REST_EMPLOYEE));
@@ -88,7 +88,7 @@ public class EmployeeIntegrationTest {
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target("http://localhost:" + this.port);
 
-		Response response = target.path(REST_EMPLOYEE).queryParam("jobTitle", "Funkin Developer").request().get();
+		Response response = target.path(REST_EMPLOYEE).queryParam("jobTitle", "Dev").request().get();
 		List<EmployeeVO> employees = response.readEntity(new GenericType<List<EmployeeVO>>() {
 		});
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
@@ -96,9 +96,9 @@ public class EmployeeIntegrationTest {
 		assertThat(employees.size()).isEqualTo(1);
 		EmployeeVO employee = (EmployeeVO) employees.get(0);
 
-		assertThat(employee.getName()).isEqualTo("Luis");
+		assertThat(employee.getName().getFirst()).isEqualTo("Luis Fernando");
 		assertThat(employee.getCpf()).isEqualTo("222.255.568.-47");
-		assertThat(employee.getJobTitle()).isEqualTo("Funkin Developer");
+		assertThat(employee.getJobTitle()).contains("Developer");
 	}
 
 	@Test
@@ -107,14 +107,14 @@ public class EmployeeIntegrationTest {
 		WebTarget target = client.target("http://localhost:" + this.port);
 
 		Response response = target.path("/rest/employee/1").request().get();
-		Employee employee = response.readEntity(Employee.class);
+		EmployeeVO employee = response.readEntity(EmployeeVO.class);
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 		assertThat(response.getHeaders().get("Content-Type").get(0)).isEqualTo(MediaType.APPLICATION_JSON);
-		assertThat(employee.getFirstName()).isEqualTo("Luis");
+		assertThat(employee.getName().getFirst()).isEqualTo("Luis Fernando");
 		assertThat(employee.getCpf()).isEqualTo("222.255.568.-47");
 		assertThat(employee.getGender()).isEqualTo("male");
-		assertThat(employee.getEmployer().getName()).isEqualTo("Kimura Sistemas");
-		assertThat(employee.getJobTitle()).isEqualTo("Fucking Developer");
+		assertThat(employee.getEmployer()).isEqualTo(1l);
+		assertThat(employee.getJobTitle()).isEqualTo("Fuckin Developer");
 	}
 
 }

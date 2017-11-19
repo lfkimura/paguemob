@@ -43,6 +43,7 @@ public class Employee {
 
 	@Column
 	private String seed;
+	public Employee(){}
 
 	public Employee(EmployeeVO employeeVO, Company company) {
 		super();

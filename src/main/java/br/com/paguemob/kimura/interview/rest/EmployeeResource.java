@@ -25,13 +25,13 @@ public class EmployeeResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCompanies(@QueryParam("jobTitle") String jobTitle) {
+	public Response getEmployees(@QueryParam("jobTitle") String jobTitle) {
 		return Response.ok(service.getEmployees(jobTitle)).build();
 	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response newCompanny(@Context UriInfo uriInfo, EmployeeVO employee) {
+	public Response newEmployee(@Context UriInfo uriInfo, EmployeeVO employee) {
 		Long employeeId = service.createEmployee(employee).getId();
 		UriBuilder location = uriInfo.getAbsolutePathBuilder();
 		location.path(Long.toString(employeeId));
@@ -41,7 +41,7 @@ public class EmployeeResource {
 	@GET
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCompany(@PathParam("id") String id) {
+	public Response getEmployee(@PathParam("id") String id) {
 		return Response.ok(service.getEmployee(id)).build();
 	}
 

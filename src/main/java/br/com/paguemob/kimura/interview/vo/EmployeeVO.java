@@ -40,6 +40,7 @@ public class EmployeeVO implements Serializable {
 
 	public EmployeeVO(Employee employee) {
 		super();
+		this.id = employee.getId();
 		this.name = new NameVO(employee.getNameTitle(), employee.getFirstName(), employee.getLastName());
 		this.gender = employee.getGender();
 		this.email = employee.getEmail();

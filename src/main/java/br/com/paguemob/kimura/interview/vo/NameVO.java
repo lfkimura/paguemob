@@ -1,12 +1,22 @@
 package br.com.paguemob.kimura.interview.vo;
 
-public class NameVO {
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+public class NameVO implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private String title = "";
 
 	private String first = "";
 
 	private String last = "";
 
+	public NameVO(){}
 	public NameVO(String title, String first, String last) {
 		super();
 		this.title = title;
@@ -14,6 +24,7 @@ public class NameVO {
 		this.last = last;
 	}
 
+	@JsonIgnore
 	public String getFullName() {
 		return (title + " " + first + " " + last).trim();
 
