@@ -48,5 +48,13 @@ The development was based in
  - [X] API tests
  - [ ] Validation errors
  - [ ] API documentation
- - [ ] Live version on [Heroku](https://heroku.com)
+ - [X] Live version on [Heroku](https://heroku.com)
+ 	URLS:
+ 	- https://hidden-dawn-14052.herokuapp.com/rest/company (GET,POST)
+ 	- https://hidden-dawn-14052.herokuapp.com/rest/company/{id} (GET)
+ 	- https://hidden-dawn-14052.herokuapp.com/rest/employee (GET,POST)
+ 	- https://hidden-dawn-14052.herokuapp.com/rest/employee/{id} (GET)
+ 	- https://hidden-dawn-14052.herokuapp.com/rest/industry (GET)
+ 
+ 	- https://hidden-dawn-14052.herokuapp.com/rest/industry
  - [ ] Authentication using OAuth2 and Spring Security
