@@ -23,7 +23,11 @@ import br.com.paguemob.kimura.interview.filters.Filter;
 import br.com.paguemob.kimura.interview.filters.FilterOperatorType;
 import br.com.paguemob.kimura.interview.service.CompanyService;
 import br.com.paguemob.kimura.interview.vo.CompanyVO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 
+@Api(value = "/company")
 @Path("/company")
 public class CompanyResource {
 
@@ -31,20 +35,22 @@ public class CompanyResource {
 	private CompanyService service;
 
 	@GET
+	@ApiOperation(value = "Returns companies by industry", notes = "Returns a list of all industries", responseContainer = "list", authorizations = @Authorization(value = "api_key"))
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCompanies(@QueryParam("name") String name, @QueryParam("industry") String industry, @QueryParam("page") Integer page, @QueryParam("maxResults") Integer maxResults) {
+	public Response getCompanies(@QueryParam("name") String name, @QueryParam("industry") String industry,
+			@QueryParam("page") Integer page, @QueryParam("maxResults") Integer maxResults) {
 		List<Filter<String>> filters = addFilters(name, industry);
 		List<CompanyVO> companies;
-		if(shouldBePaginated(page, maxResults)){
-			companies = service.getCompanies(filters,new PageRequest(page-1, maxResults) );
-		}
-		else companies = service.getCompanies(filters);
-		
+		if (shouldBePaginated(page, maxResults)) {
+			companies = service.getCompanies(filters, new PageRequest(page - 1, maxResults));
+		} else
+			companies = service.getCompanies(filters);
+
 		return Response.ok(companies).build();
 	}
 
 	private boolean shouldBePaginated(Integer page, Integer maxResults) {
-		return page!= null && maxResults!= null && page>0;
+		return page != null && maxResults != null && page > 0;
 	}
 
 	@POST
@@ -65,12 +71,12 @@ public class CompanyResource {
 			filters.add(new Filter("industry", FilterOperatorType.EQUAL, IndustryType.findByName(industry)));
 		return filters;
 	}
+
 	@GET
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getCompany(@PathParam("id") String id) {
 		return Response.ok(service.getCompany(id)).build();
 	}
-
 
 }

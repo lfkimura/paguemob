@@ -51,8 +51,7 @@ public class CompanyIntegrationTest {
 		WebTarget target = client.target("http://localhost:" + this.port);
 
 		Response response = target.path("/rest/company/").request().get();
-		List<CompanyVO> companies = response.readEntity(new GenericType<List<CompanyVO>>() {
-		});
+		List<CompanyVO> companies = (List<CompanyVO>) response.readEntity(new GenericType<List<CompanyVO>>() {});
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 		assertThat(response.getHeaders().get("Content-Type").get(0)).isEqualTo(MediaType.APPLICATION_JSON);
 		assertThat(companies.size()).isEqualTo(5);
